@@ -1,0 +1,22 @@
+Mapa mental do problema
+
+ - Carregar os dados
+ - Unificá-los
+ - Separar com e sem outliers | dados de interesse
+ - Visualizar dados | data.head, matplotlib+seaborn, ...
+
+ útil: somedata.dt.month <- datetime pandas
+
+ - word to vector -> dados str - vector dbs
+ - normalizar, limpar, etc. - processamento dados
+ 	d-\mu \over \sigma
+ - separar para treino-teste, scikit learn, tf, pytorch...
+ - escolher o modelo para classificação ou regressão
+ - model.fit - treinar
+ - model.predict - testar
+ - verificar precisão - sucesso do modelo
+
+-> supervisionada - nao sei o que quero - identificar padrões
+-> reinforcement - sei o que quero - custo e objetivo bem definidos
+-> | tabela azure para escolha do modelo - cheat sheet
+
