@@ -1,5 +1,9 @@
 # Imports
 import pandas as pd
+import matplotlib.pyplot as plt
+from clean_data import clean_data
+import seaborn as sns
+from sklearn.preprocessing import LabelEncoder
 
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
@@ -13,13 +17,7 @@ ocorrencias = pd.read_csv(
     on_bad_lines='skip'
 )
 
-# We replace the "," with "." to facilitate processing
-ocorrencias['Latitude'] = pd.to_numeric(
-    ocorrencias['Latitude'].str.replace(',', '.')
-)
-ocorrencias['Longitude'] = pd.to_numeric(
-    ocorrencias['Longitude'].str.replace(',', '.')
-)
+ocorrencias = clean_data(ocorrencias)
 
 # Define a function to extract "category2/category3" from a string
 def extract_category3(string):
@@ -60,3 +58,43 @@ ocorrencias['category3'] = ocorrencias['category3'].replace(
 # Display the updated value counts
 print(ocorrencias['category2'].value_counts())
 print(ocorrencias['category3'].value_counts())
+
+#ocorrencias['category2'] = ocorrencias['category2'].astype(str)
+#ocorrencias['category3'] = ocorrencias['category3'].astype(str)
+#ocorrencias['Distrito'] = ocorrencias['Distrito'].astype(str)
+#ocorrencias['Concelho'] = ocorrencias['Concelho'].astype(str)
+#ocorrencias['Freguesia'] = ocorrencias['Freguesia'].astype(str)
+#ocorrencias['NumeroMeiosTerrestresEnvolvidos'] = ocorrencias['NumeroMeiosTerrestresEnvolvidos'].astype(int)
+#ocorrencias['NumeroOperacionaisTerrestresEnvolvidos'] = ocorrencias['NumeroOperacionaisTerrestresEnvolvidos'].astype(int)
+#ocorrencias['NumeroMeiosAereosEnvolvidos'] = ocorrencias['NumeroMeiosAereosEnvolvidos'].astype(int)
+#ocorrencias['NumeroOperacionaisAereosEnvolvidos'] = ocorrencias['NumeroOperacionaisAereosEnvolvidos'].astype(int)
+
+
+#print(ocorrencias['Distrito'].value_counts())
+
+
+#df_cat2dist = ocorrencias[['category2','Distrito']]
+
+#plt.matshow(df_cat2dist.corr())
+#plt.show()
+
+# Convert the string data to numerical labels
+#le = LabelEncoder()
+#ocorrencias['cat2_le'] = le.fit_transform(ocorrencias['category2'])
+#ocorrencias['Distrito_le'] = le.fit_transform(ocorrencias['Distrito'])
+
+# Compute the correlation matrix
+#corr = ocorrencias[['cat2_le', 'Distrito_le']].corr()
+
+# Create a heatmap plot
+#sns.heatmap(corr, cmap='coolwarm', annot=True)
+#plt.show()
+
+# Create a scatter plot
+#ocorrencias.plot(kind='scatter', x='Distrito', y='category2')
+
+#Plot grapg
+#plt.title('Incident Locations')
+#plt.xlabel('Distrito')
+#plt.ylabel('Category - Type 2')
+#plt.show()
