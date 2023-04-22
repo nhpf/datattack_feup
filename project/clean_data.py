@@ -24,10 +24,11 @@ def clean_data(df, remove_false_alarms=True) -> pd.DataFrame:
     print(data_clean['Longitude'][0], ' :', type(data_clean['Longitude'][0]))
     print(data_clean['Latitude'][0], ' :', type(data_clean['Latitude'][0]))
 
-    data_clean['DiaOcorrencia'] = pd.to_datetime(data_clean['DataOcorrencia'], format='%d/%m/%Y %H:%M:%S').dt.date
-    # data_clean = data_clean['DiaOcorrencia'].astype(str)
+    data_clean['DataOcorrencia'] = pd.to_datetime(data_clean['DataOcorrencia'], format='%d/%m/%Y %H:%M:%S').dt.date
+    data_clean['DataFechoOperacional'] = pd.to_datetime(data_clean['DataFechoOperacional'], format='%d/%m/%Y %H:%M:%S').dt.date
 
-    print(data_clean['DiaOcorrencia'][0], ' :', type(data_clean['DiaOcorrencia'][0]))
+    print(data_clean['DataOcorrencia'][0], ' :', type(data_clean['DataOcorrencia'][0]))
+    print(data_clean['DataFechoOperacional'][0], ' :', type(data_clean['DataFechoOperacional'][0]))
 
     if remove_false_alarms == True:
         data_clean = data_clean[data_clean['EstadoOcorrencia'] != 'Falso Alarme']
