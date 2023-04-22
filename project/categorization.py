@@ -45,10 +45,10 @@ for value in categorias:
     ocorrencias['Natureza']
     
 
-ocorrencias["category2_3"] = ocorrencias['Natureza'].astype(str).apply(extract_category2_3)
+ocorrencias['category2_3'] = ocorrencias['Natureza'].astype(str).apply(extract_category2_3)
 
 # Display the DataFrame with the new "category2_3" column
-print(ocorrencias[])
+print(ocorrencias['category2_3'])
 # Check the size and shape of the database
 #ocorrencias.shape
 
