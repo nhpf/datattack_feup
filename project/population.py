@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-population = pd.read_csv('data.csv')
+population = pd.read_csv('../Data/population-2016.csv')
 print('csv number of columns: ', len(population.columns))
 print(population.columns)
 print(population.head())
