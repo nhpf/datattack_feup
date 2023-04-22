@@ -51,6 +51,7 @@ docs/_build/
 
 # Virtualenv
 venv
+.venv
 
 # Ide cache
 .idea
