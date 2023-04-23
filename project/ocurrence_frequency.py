@@ -1,7 +1,7 @@
 # Imports
 import pandas as pd
 import matplotlib.pyplot as plt
-from clean_data import clean_data
+from preprocess_data import clean_data
 import os
 
 #Parses the data and makes list of lists based on unique values for the Districts columns

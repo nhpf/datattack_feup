@@ -1,7 +1,7 @@
 # Imports
 import pandas as pd
 import matplotlib.pyplot as plt
-from clean_data import clean_data, parse_categories
+from preprocess_data import clean_data, parse_categories
 from ocurrence_frequency import ocurrence_frequency
 import os
 

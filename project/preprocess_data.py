@@ -1,4 +1,3 @@
-# clean data and count length
 import pandas as pd
 import numpy as np
 
