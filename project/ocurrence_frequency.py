@@ -61,7 +61,7 @@ def ocurrence_frequency(df:pd.DataFrame,categorylevel:str,geoscope:str,datasetis
         plt.xticks(fontsize=8,rotation=45,ha='right')
         plt.ylabel("Number of ocurrences")
         plt.tight_layout()
-        plt.savefig(os.path.join('.','images',f'{row1}_ocurrences.png'))
+        plt.savefig(os.path.join('.','images',f'{row1}_ocurrences_{geoscope}_{categorylevel}.png'))
         plt.clf()
         plt.cla()
         j = j+1
