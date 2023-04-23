@@ -47,3 +47,29 @@ def clean_data(df, remove_false_alarms=True) -> pd.DataFrame:
 
     return data_clean
 
+    # Define a function to extract category from a string
+def _extract_category(string, cat_index):
+    if string == "nan" or any(str.isdigit(c) for c in string):
+        return
+    else:
+        parts = string.split("/", 4)
+        return parts[cat_index-1].strip()
+
+
+#Reformulate categories based on functions defined
+def parse_categories(data_clean:pd.DataFrame):
+    data_clean['category1'] = data_clean['Natureza'].astype(str).apply(lambda x: _extract_category(x,cat_index=1))
+    data_clean['category2'] = data_clean['Natureza'].astype(str).apply(lambda x: _extract_category(x,cat_index=2))
+    data_clean['category3'] = data_clean['Natureza'].astype(str).apply(lambda x: _extract_category(x,cat_index=3))
+    
+    #Consolidate categories with little statistical relevance
+    relevance_threshold = 100
+    category_counts = data_clean['category3'].value_counts()
+    filtered_categories = category_counts[category_counts <= relevance_threshold].index.tolist()
+    # Replace the filtered categories with a new "Other" category
+    data_clean['category3'] = data_clean['category3'].replace(
+    to_replace=filtered_categories,
+    value='Outras ocorrências'
+    )
+    
+    return data_clean
