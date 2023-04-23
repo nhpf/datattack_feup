@@ -8,14 +8,11 @@ from utils import normalize_str
 
 # Show the most prevalent issue category in each municipality
 def plot_most_prevalent_issue_by_municipality(
-        clean_df: pd.DataFrame,
-        category_level: int = 2
+    clean_df: pd.DataFrame, category_level: int = 2
 ):
     issue_by_municipality = {}
     for municipality in clean_df["Concelho"].unique():
-        clean_df_by_municipality = clean_df[
-            clean_df["Concelho"] == municipality
-        ]
+        clean_df_by_municipality = clean_df[clean_df["Concelho"] == municipality]
         most_prevalent_issue = clean_df_by_municipality.mode()[
             f"category{category_level}"
         ][0]

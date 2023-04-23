@@ -1,16 +1,9 @@
 import pandas as pd
-import geopandas as gpd
-import matplotlib.pyplot as plt
-from matplotlib import colormaps
-import matplotlib.patches as mpatches
-from sklearn.feature_extraction.text import HashingVectorizer
-from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
 from preprocess_data import clean_data, parse_categories
-
-# pd.set_option("display.max_rows", None)
-# pd.set_option("display.max_columns", None)
-# pd.set_option("display.width", None)
-# pd.set_option("display.max_colwidth", None)
 
 # Read the database .CSV
 occurrences = pd.read_csv(
@@ -20,32 +13,40 @@ occurrences = pd.read_csv(
 # Get relevant and error-free data
 occurrences = parse_categories(clean_data(occurrences))
 
-# print(occurrences['category1'].value_counts())
-#
-# print(occurrences.head())
-# print(occurrences.columns)
+occurrences["day_idx"] = occurrences["DataOcorrencia"] - min(
+    occurrences["DataOcorrencia"]
+)
+occurrences["day_idx"] = occurrences["day_idx"].apply(
+    lambda occ: occ.total_seconds() / 3600
+)
 
-# Encode the categorical variables using feature hashing with HashingVectorizer
-num_districts = occurrences.nunique()["Distrito"]
-hash_size_increase = 2.5  # Increase number of features to avoid hash collision
-# print(num_districts)
+# encode the categorical variables
+le_state = LabelEncoder()
+region = "Distrito"
+occurrences[region] = le_state.fit_transform(occurrences[region])
+enc = OneHotEncoder(sparse_output=False, handle_unknown="ignore")
+encoded_data = enc.fit_transform(occurrences[[region]])
 
-district_vectorizer = HashingVectorizer(n_features=int(hash_size_increase * num_districts))
-X_cat = district_vectorizer.fit_transform(occurrences["Distrito"])
+# combine the encoded variables with the numerical variables
+X = pd.concat(
+    [pd.DataFrame(encoded_data).reset_index(inplace=True), occurrences["day_idx"]],
+    axis=1,
+)
+print(X)
+y = occurrences["category2"]
 
-# Combine the encoded categorical variables and the numerical variable
-X = pd.DataFrame(X_cat.toarray())
-X["category2"] = occurrences["category2"]
+# split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=12
+)
 
-# Fit a linear regression model to the data
-model = LinearRegression()
-# model.fit(X.drop("y", axis=1), X["y"]) # TODO: replace y by man-hour
+# train a random forest classifier
+clf = RandomForestClassifier(n_estimators=1000, random_state=12)
+clf.fit(X_train, y_train)
 
-# Make some predictions using the model
-# X_new = pd.DataFrame({"x1": ["A", "C", "B"], "x2": ["X", "Y", "Y"]})
-# X_cat_new = district_vectorizer.transform(X_new["x1"] + "_" + X_new["x2"])
-# X_new_encoded = pd.DataFrame(X_cat_new.toarray())
-# y_pred = model.predict(X_new_encoded)
-# print(y_pred)
+# make predictions on the test set
+y_pred = clf.predict(X_test)
 
-# Random forest
+# calculate the accuracy score
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy score: {accuracy:.2f}")
