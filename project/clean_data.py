@@ -1,5 +1,9 @@
 # clean data and count length
 import pandas as pd
+import numpy as np
+
+def datetime_to_hours_int(x):
+    return [i.total_seconds()/3600 for i in x]
 
 def clean_data(df, remove_false_alarms=True) -> pd.DataFrame:
     print('df initial length: ', len(df))
@@ -24,8 +28,8 @@ def clean_data(df, remove_false_alarms=True) -> pd.DataFrame:
     print(data_clean['Longitude'][0], ' :', type(data_clean['Longitude'][0]))
     print(data_clean['Latitude'][0], ' :', type(data_clean['Latitude'][0]))
 
-    data_clean['DataOcorrencia'] = pd.to_datetime(data_clean['DataOcorrencia'], format='%d/%m/%Y %H:%M:%S').dt.date
-    data_clean['DataFechoOperacional'] = pd.to_datetime(data_clean['DataFechoOperacional'], format='%d/%m/%Y %H:%M:%S').dt.date
+    data_clean['DataOcorrencia'] = pd.to_datetime(data_clean['DataOcorrencia'], format='%d/%m/%Y %H:%M:%S')
+    data_clean['DataFechoOperacional'] = pd.to_datetime(data_clean['DataFechoOperacional'], format='%d/%m/%Y %H:%M:%S')
 
     print(data_clean['DataOcorrencia'][0], ' :', type(data_clean['DataOcorrencia'][0]))
     print(data_clean['DataFechoOperacional'][0], ' :', type(data_clean['DataFechoOperacional'][0]))
@@ -33,6 +37,13 @@ def clean_data(df, remove_false_alarms=True) -> pd.DataFrame:
     if remove_false_alarms == True:
         data_clean = data_clean[data_clean['EstadoOcorrencia'] != 'Falso Alarme']
 
+    data_clean.dropna(inplace=True)
     print('df length: ', len(data_clean))
 
+    data_clean['hh'] = np.multiply(
+        (data_clean['NumeroOperacionaisAereosEnvolvidos'] + data_clean['NumeroOperacionaisTerrestresEnvolvidos']),
+        datetime_to_hours_int(data_clean['DataFechoOperacional'] - data_clean['DataOcorrencia'])
+    )
+
     return data_clean
+
